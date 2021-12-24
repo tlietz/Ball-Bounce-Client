@@ -1,7 +1,6 @@
 extern crate rand;
-use rand::Rng;
-
 use macroquad::{color, prelude::*};
+use rand::Rng;
 
 enum GameState {
     Ready,
@@ -15,6 +14,7 @@ const BORDER_W: f32 = 0.5;
 const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_COLOR: color::Color = RED;
+const BALL_START_SPEED: f32 = 10.;
 
 const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_START_W: f32 = 2.0;
@@ -61,7 +61,7 @@ async fn main() {
             ball_x = platform_x + ball_offset;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
-                ball_vel.y = -9.;
+                launch_ball(platform_x, ball_x, &mut ball_vel);
             }
         }
 
@@ -90,6 +90,9 @@ async fn main() {
 fn new_ball_offset() -> f32 {
     rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
 }
+
+// launches the ball by changing its velocity
+fn launch_ball(platform_x: f32, ball_x: f32, ball_vel: &mut Vec2) {}
 
 fn draw_border() {
     // left border
