@@ -17,6 +17,7 @@ const BALL_COLOR: color::Color = RED;
 const BALL_START_SPEED: f32 = 10.;
 
 const PLATFORM_COLOR: color::Color = WHITE;
+const PLATFORM_FLOAT_H: f32 = 1.;
 const PLATFORM_START_W: f32 = 2.0;
 
 #[macroquad::main("Pongkanoid")]
@@ -33,7 +34,7 @@ async fn main() {
     // randomly deviated from the center
     let mut ball_offset: f32 = new_ball_offset();
     let mut ball_x = platform_x + ball_offset;
-    let mut ball_y = SCREEN_H - (ball_radius + platform_height);
+    let mut ball_y = SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H);
 
     let mut game_state = GameState::Ready;
 
@@ -75,7 +76,7 @@ async fn main() {
         // draw platform
         draw_rectangle(
             platform_x - platform_width / 2.,
-            SCREEN_H - platform_height,
+            SCREEN_H - (platform_height + PLATFORM_FLOAT_H),
             platform_width,
             platform_height,
             PLATFORM_COLOR,
