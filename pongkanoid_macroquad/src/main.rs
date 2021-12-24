@@ -62,7 +62,7 @@ async fn main() {
             ball_x = platform_x + ball_offset;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
-                launch_ball(platform_x, ball_x, &mut ball_vel);
+                launch_ball(platform_x, ball_x, BALL_START_SPEED, &mut ball_vel);
             }
         }
 
@@ -92,11 +92,11 @@ fn new_ball_offset() -> f32 {
     rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
 }
 
-// launches the ball by changing its velocity
-fn launch_ball(platform_x: f32, ball_x: f32, ball_vel: &mut Vec2) {
+// launches the ball from the platform by changing its velocity
+fn launch_ball(platform_x: f32, ball_x: f32, ball_speed: f32, ball_vel: &mut Vec2) {
     let percent_offset = (ball_x - platform_x) / (PLATFORM_START_W / 2.);
-    ball_vel.x = percent_offset * BALL_START_SPEED;
-    ball_vel.y = -(1. - percent_offset.abs()) * BALL_START_SPEED;
+    ball_vel.x = percent_offset * ball_speed;
+    ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
 }
 
 fn draw_border() {
