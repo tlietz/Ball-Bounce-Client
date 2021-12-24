@@ -14,7 +14,7 @@ const BORDER_W: f32 = 0.5;
 const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_COLOR: color::Color = RED;
-const BALL_START_SPEED: f32 = 10.;
+const BALL_START_SPEED: f32 = 15.;
 
 const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = 1.;
@@ -93,7 +93,11 @@ fn new_ball_offset() -> f32 {
 }
 
 // launches the ball by changing its velocity
-fn launch_ball(platform_x: f32, ball_x: f32, ball_vel: &mut Vec2) {}
+fn launch_ball(platform_x: f32, ball_x: f32, ball_vel: &mut Vec2) {
+    let percent_offset = (ball_x - platform_x) / (PLATFORM_START_W / 2.);
+    ball_vel.x = percent_offset * BALL_START_SPEED;
+    ball_vel.y = -(1. - percent_offset.abs()) * BALL_START_SPEED;
+}
 
 fn draw_border() {
     // left border
