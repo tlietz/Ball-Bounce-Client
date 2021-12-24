@@ -12,6 +12,7 @@ const BORDER_W: f32 = 0.5;
 const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_COLOR: color::Color = RED;
+
 const PLATFORM_COLOR: color::Color = WHITE;
 
 #[macroquad::main("Pongkanoid")]
@@ -22,7 +23,7 @@ async fn main() {
     let platform_height = BORDER_W;
 
     // initialize the ball to be sitting on the top of the platform
-    let mut ball_radius = platform_height * 0.5;
+    let mut ball_radius = platform_height * 0.4;
     let mut ball_x = platform_x;
     let mut ball_y = SCREEN_H - (ball_radius + platform_height);
     let mut ball_vel = vec2(0.0, 0.0);
@@ -53,11 +54,13 @@ async fn main() {
             ball_x = platform_x;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
+                ball_vel.y = -9.;
             }
         }
 
         if let GameState::Playing = game_state {
-            ball_y = ball_y - 9.0 * delta;
+            ball_x += ball_vel.x * delta;
+            ball_y += ball_vel.y * delta;
         }
 
         draw_circle(ball_x, ball_y, ball_radius, BALL_COLOR);
