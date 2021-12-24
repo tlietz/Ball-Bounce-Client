@@ -19,14 +19,16 @@ const PLATFORM_COLOR: color::Color = WHITE;
 async fn main() {
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
+    let mut platform_speed = 5.;
     let platform_width = 2.;
     let platform_height = BORDER_W;
 
-    // initialize the ball to be sitting on the top of the platform
     let mut ball_radius = platform_height * 0.4;
+    let mut ball_vel = vec2(0.0, 0.0);
+    // initialize the ball to be sitting on the top of the platform
+    // at a point randomly deviated from the center
     let mut ball_x = platform_x;
     let mut ball_y = SCREEN_H - (ball_radius + platform_height);
-    let mut ball_vel = vec2(0.0, 0.0);
 
     let mut game_state = GameState::Ready;
 
@@ -43,11 +45,11 @@ async fn main() {
         let delta = get_frame_time();
 
         if is_key_down(KeyCode::Right) && platform_x + platform_width / 2. < SCREEN_W - BORDER_W {
-            platform_x += 5. * delta;
+            platform_x += platform_speed * delta;
         }
 
         if is_key_down(KeyCode::Left) && platform_x - platform_width / 2. > BORDER_W {
-            platform_x -= 5. * delta;
+            platform_x -= platform_speed * delta;
         }
 
         if let GameState::Ready = game_state {
