@@ -1,3 +1,6 @@
+extern crate rand;
+use rand::Rng;
+
 use macroquad::{color, prelude::*};
 
 enum GameState {
@@ -14,20 +17,22 @@ const BORDER_COLOR: color::Color = GRAY;
 const BALL_COLOR: color::Color = RED;
 
 const PLATFORM_COLOR: color::Color = WHITE;
+const PLATFORM_START_W: f32 = 2.0;
 
 #[macroquad::main("Pongkanoid")]
 async fn main() {
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
     let mut platform_speed = 5.;
-    let platform_width = 2.;
-    let platform_height = BORDER_W;
+    let mut platform_width = PLATFORM_START_W;
+    let platform_height = BORDER_W * 0.75;
 
     let mut ball_radius = platform_height * 0.4;
     let mut ball_vel = vec2(0.0, 0.0);
-    // initialize the ball to be sitting on the top of the platform
-    // at a point randomly deviated from the center
-    let mut ball_x = platform_x;
+    // Ball initialized sitting on the top of the platform,
+    // randomly deviated from the center
+    let mut ball_offset: f32 = new_ball_offset();
+    let mut ball_x = platform_x + ball_offset;
     let mut ball_y = SCREEN_H - (ball_radius + platform_height);
 
     let mut game_state = GameState::Ready;
@@ -53,7 +58,7 @@ async fn main() {
         }
 
         if let GameState::Ready = game_state {
-            ball_x = platform_x;
+            ball_x = platform_x + ball_offset;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
                 ball_vel.y = -9.;
@@ -65,7 +70,9 @@ async fn main() {
             ball_y += ball_vel.y * delta;
         }
 
+        // draw ball
         draw_circle(ball_x, ball_y, ball_radius, BALL_COLOR);
+        // draw platform
         draw_rectangle(
             platform_x - platform_width / 2.,
             SCREEN_H - platform_height,
@@ -78,6 +85,10 @@ async fn main() {
 
         next_frame().await
     }
+}
+
+fn new_ball_offset() -> f32 {
+    rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
 }
 
 fn draw_border() {
