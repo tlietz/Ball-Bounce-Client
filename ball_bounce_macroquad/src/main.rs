@@ -12,18 +12,18 @@ enum Axis {
     Y,
 }
 
-const SCREEN_W: f32 = 20.0;
-const SCREEN_H: f32 = 20.0;
+const SCREEN_W: f32 = 600.0;
+const SCREEN_H: f32 = 600.0;
 
-const BORDER_W: f32 = 0.5;
+const BORDER_W: f32 = SCREEN_W * 0.025;
 const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_COLOR: color::Color = RED;
-const BALL_START_SPEED: f32 = 10.;
+const BALL_START_SPEED: f32 = SCREEN_H / 1.5;
 
 const PLATFORM_COLOR: color::Color = WHITE;
-const PLATFORM_FLOAT_H: f32 = 1.;
-const PLATFORM_START_W: f32 = 2.0;
+const PLATFORM_FLOAT_H: f32 = SCREEN_H * 0.025;
+const PLATFORM_START_W: f32 = SCREEN_W * 0.1;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
@@ -31,11 +31,11 @@ async fn main() {
 
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
-    let platform_speed = 5.;
+    let platform_speed = SCREEN_W / 2.;
     let platform_width = PLATFORM_START_W;
     let platform_height = BORDER_W * 0.75;
 
-    let ball_radius = platform_height * 0.4;
+    let ball_radius = platform_height * 0.5;
     let mut ball_speed = BALL_START_SPEED;
     let mut ball_vel = vec2(0.0, 0.0);
     // Ball initialized sitting on the top of the platform,
@@ -89,13 +89,16 @@ async fn main() {
 
             // ball hits platform.
             // speed up the ball and increment score
-            if ball_x > platform_x - platform_width / 2.
-                && ball_x < platform_x + platform_width / 2.
+            if ball_x + ball_radius > platform_x - platform_width / 2.
+                && ball_x - ball_radius < platform_x + platform_width / 2.
                 && ball_y + ball_radius > SCREEN_H - (PLATFORM_FLOAT_H + platform_height)
-                && ball_y + ball_radius < SCREEN_H - (PLATFORM_FLOAT_H + platform_height / 2.)
+                && ball_y - ball_radius < SCREEN_H - (PLATFORM_FLOAT_H)
             {
                 score += 1;
-                ball_speed += 1.;
+                if ball_speed < BALL_START_SPEED * 2. {
+                    println!("{}", ball_speed);
+                    ball_speed += SCREEN_H / 8.;
+                }
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
@@ -114,6 +117,8 @@ async fn main() {
             }
         }
 
+        // draw background
+        draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
         // draw ball
         draw_circle(ball_x, ball_y, ball_radius, BALL_COLOR);
         // draw platform
