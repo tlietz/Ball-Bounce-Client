@@ -23,7 +23,7 @@ const BALL_START_SPEED: f32 = SCREEN_H / 1.5;
 
 const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = SCREEN_H * 0.025;
-const PLATFORM_START_W: f32 = SCREEN_W * 0.1;
+const PLATFORM_START_W: f32 = SCREEN_W * 0.11;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
@@ -31,7 +31,7 @@ async fn main() {
 
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
-    let platform_speed = SCREEN_W / 2.;
+    let platform_speed = SCREEN_W / 1.5;
     let platform_width = PLATFORM_START_W;
     let platform_height = BORDER_W * 0.75;
 
@@ -51,6 +51,9 @@ async fn main() {
     loop {
         let delta = get_frame_time();
 
+        // draw background
+        draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
+
         if is_key_down(KeyCode::Right) && platform_x + platform_width / 2. < SCREEN_W - BORDER_W {
             platform_x += platform_speed * delta;
         }
@@ -60,8 +63,20 @@ async fn main() {
         }
 
         if let GameState::Ready = game_state {
+            // ball tracks the platform
             ball_y = SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H);
             ball_x = platform_x + ball_offset;
+            draw_text_ex(
+                "Press Spacebar to start",
+                BORDER_W * 4.,
+                BORDER_W * 20.,
+                TextParams {
+                    font_size: 40,
+                    font,
+                    color: BLACK,
+                    ..Default::default()
+                },
+            );
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
                 score = 0;
@@ -93,13 +108,13 @@ async fn main() {
             if ball_x + ball_radius > platform_x - platform_width / 2.
                 && ball_x - ball_radius < platform_x + platform_width / 2.
                 && ball_y + ball_radius > SCREEN_H - (PLATFORM_FLOAT_H + platform_height)
-                && ball_y - ball_radius < SCREEN_H - (PLATFORM_FLOAT_H)
+                && ball_y < SCREEN_H - (PLATFORM_FLOAT_H)
             {
                 score += 1;
-                if ball_speed < BALL_START_SPEED * 2. {
-                    println!("{}", ball_speed);
+                if ball_speed < BALL_START_SPEED * 2.5 {
                     ball_speed += SCREEN_H / 8.;
                 }
+                println!("{}", ball_speed);
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
@@ -117,8 +132,6 @@ async fn main() {
             }
         }
 
-        // draw background
-        draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
         // draw ball
         draw_circle(ball_x, ball_y, ball_radius, BALL_COLOR);
         // draw platform
@@ -153,7 +166,7 @@ fn new_ball_offset() -> f32 {
 
 // Launches the ball from the platform by changing its velocity correponding to where the ball hits the platform.
 // This is used when the ball hits the platform, or when launching the ball with spacebar.
-// The ball is launched at a maximum angle of 75 degrees with respect to the normal.
+// The ball is launched at a maximum angle with respect to the normal.
 fn launch_ball(
     platform_x: f32,
     platform_width: f32,
@@ -161,11 +174,15 @@ fn launch_ball(
     ball_speed: f32,
     ball_vel: &mut Vec2,
 ) {
+    let max_angle = 0.7;
     let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
-    if percent_offset < -0.75 {
-        percent_offset = -0.75;
+    if percent_offset < -max_angle {
+        percent_offset = -max_angle;
     } else if percent_offset > 0.75 {
-        percent_offset = 0.75;
+        percent_offset = max_angle;
+    } else if percent_offset == 0.00 {
+        // if the ball hits the center of platform, launch at a random angle
+        percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
     }
 
     ball_vel.x = percent_offset * ball_speed;
