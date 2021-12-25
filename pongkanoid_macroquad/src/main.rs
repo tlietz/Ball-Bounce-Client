@@ -64,6 +64,7 @@ async fn main() {
         }
 
         if let GameState::Ready = game_state {
+            ball_y = SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H);
             ball_x = platform_x + ball_offset;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
@@ -85,9 +86,14 @@ async fn main() {
             if (ball_x - ball_radius <= BORDER_W) || (ball_x + ball_radius >= SCREEN_W - BORDER_W) {
                 bounce_ball(Axis::X, &mut ball_vel);
             }
-
             if ball_y - ball_radius <= BORDER_W {
                 bounce_ball(Axis::Y, &mut ball_vel);
+            }
+
+            // ball goes out of bounds
+            if ball_y + ball_radius >= SCREEN_H {
+                game_state = GameState::Ready;
+                ball_offset = new_ball_offset();
             }
         }
 
