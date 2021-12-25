@@ -25,9 +25,9 @@ const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = 1.;
 const PLATFORM_START_W: f32 = 2.0;
 
-#[macroquad::main("Pongkanoid")]
+#[macroquad::main("Ball Bounce")]
 async fn main() {
-    let font = load_ttf_font("./assets/MinimalPixelv2.ttf");
+    let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
 
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
@@ -47,15 +47,6 @@ async fn main() {
     let mut score: i32 = 0;
 
     let mut game_state = GameState::Ready;
-
-    // builds camera with following coordinate system:
-    // (0, 0)        ... (SCREEN_W, 0.)
-    // (0, SCREEN_H) ... (SCREEN_W, SCREEN_H)
-    set_camera(&Camera2D {
-        zoom: vec2(1. / SCREEN_W * 2., -1. / SCREEN_H * 2.),
-        target: vec2(SCREEN_W / 2., SCREEN_H / 2.),
-        ..Default::default()
-    });
 
     loop {
         let delta = get_frame_time();
@@ -134,6 +125,18 @@ async fn main() {
             PLATFORM_COLOR,
         );
         draw_border();
+
+        // draw score
+        draw_text_ex(
+            &score.to_string(),
+            10.0,
+            10.0,
+            TextParams {
+                font_size: 5,
+                font,
+                ..Default::default()
+            },
+        );
 
         next_frame().await
     }
