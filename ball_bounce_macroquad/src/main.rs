@@ -27,6 +27,8 @@ const PLATFORM_START_W: f32 = 2.0;
 
 #[macroquad::main("Pongkanoid")]
 async fn main() {
+    let font = load_ttf_font("./assets/MinimalPixelv2.ttf");
+
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
     let platform_speed = 5.;
@@ -41,6 +43,8 @@ async fn main() {
     let mut ball_offset: f32 = new_ball_offset();
     let mut ball_x = platform_x + ball_offset;
     let mut ball_y = SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H);
+
+    let mut score: i32 = 0;
 
     let mut game_state = GameState::Ready;
 
@@ -84,10 +88,11 @@ async fn main() {
             ball_y += ball_vel.y * delta;
 
             // ball hit left or right boundary
-            if (ball_x - ball_radius <= BORDER_W) || (ball_x + ball_radius >= SCREEN_W - BORDER_W) {
+            if (ball_x - ball_radius < BORDER_W) || (ball_x + ball_radius > SCREEN_W - BORDER_W) {
                 bounce_ball(Axis::X, &mut ball_vel);
             }
-            if ball_y - ball_radius <= BORDER_W {
+            //ball hit top boundary
+            if ball_y - ball_radius < BORDER_W {
                 bounce_ball(Axis::Y, &mut ball_vel);
             }
 
@@ -98,6 +103,7 @@ async fn main() {
                 && ball_y + ball_radius > SCREEN_H - (PLATFORM_FLOAT_H + platform_height)
                 && ball_y + ball_radius < SCREEN_H - (PLATFORM_FLOAT_H + platform_height / 2.)
             {
+                score += 1;
                 ball_speed += 1.;
                 launch_ball(
                     platform_x,
@@ -109,9 +115,11 @@ async fn main() {
             }
 
             // ball goes out of bounds
+            // reinitiliaze variables for new game.
             if ball_y + ball_radius >= SCREEN_H {
                 game_state = GameState::Ready;
                 ball_offset = new_ball_offset();
+                score = 0;
             }
         }
 
@@ -125,7 +133,6 @@ async fn main() {
             platform_height,
             PLATFORM_COLOR,
         );
-
         draw_border();
 
         next_frame().await
