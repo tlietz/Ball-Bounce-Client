@@ -31,7 +31,7 @@ async fn main() {
 
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
-    let platform_speed = SCREEN_W / 1.5;
+    let platform_speed = SCREEN_W / 2.;
     let platform_width = PLATFORM_START_W;
     let platform_height = BORDER_W * 0.75;
 
@@ -93,7 +93,6 @@ async fn main() {
         if let GameState::Playing = game_state {
             ball_x += ball_vel.x * delta;
             ball_y += ball_vel.y * delta;
-            ball_speed = BALL_START_SPEED;
 
             // ball hit left or right boundary
             if (ball_vel.x < 0. && ball_x - ball_radius < BORDER_W)
@@ -118,7 +117,6 @@ async fn main() {
                 if ball_speed < BALL_START_SPEED * 2.5 {
                     ball_speed += SCREEN_H / 8.;
                 }
-                println!("{}", ball_speed);
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
@@ -133,6 +131,7 @@ async fn main() {
             if ball_y + ball_radius >= SCREEN_H {
                 game_state = GameState::Ready;
                 ball_offset = new_ball_offset();
+                ball_speed = BALL_START_SPEED;
             }
         }
 
@@ -168,7 +167,7 @@ fn new_ball_offset() -> f32 {
     rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
 }
 
-// Launches the ball from the platform by changing its velocity correponding to where the ball hits the platform.
+// Launches the ball from the platform by changing its velocity corresponding to where the ball hits the platform.
 // This is used when the ball hits the platform, or when launching the ball with spacebar.
 // The ball is launched at a maximum angle with respect to the normal.
 fn launch_ball(
@@ -178,12 +177,13 @@ fn launch_ball(
     ball_speed: f32,
     ball_vel: &mut Vec2,
 ) {
-    let max_angle = 0.7;
+    // maximum offset calculated to determine angle of launch
+    let max_offset = 0.7;
     let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
-    if percent_offset < -max_angle {
-        percent_offset = -max_angle;
-    } else if percent_offset > 0.75 {
-        percent_offset = max_angle;
+    if percent_offset < -max_offset {
+        percent_offset = -max_offset;
+    } else if percent_offset > max_offset {
+        percent_offset = max_offset;
     } else if percent_offset == 0.00 {
         // if the ball hits the center of platform, launch at a random angle
         percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
