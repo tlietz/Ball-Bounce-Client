@@ -64,6 +64,7 @@ async fn main() {
             ball_x = platform_x + ball_offset;
             if is_key_down(KeyCode::Space) {
                 game_state = GameState::Playing;
+                score = 0;
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
@@ -113,7 +114,6 @@ async fn main() {
             if ball_y + ball_radius >= SCREEN_H {
                 game_state = GameState::Ready;
                 ball_offset = new_ball_offset();
-                score = 0;
             }
         }
 
@@ -134,10 +134,10 @@ async fn main() {
         // draw score
         draw_text_ex(
             &score.to_string(),
-            10.0,
-            10.0,
+            BORDER_W * 2.,
+            BORDER_W * 5.,
             TextParams {
-                font_size: 5,
+                font_size: 50,
                 font,
                 ..Default::default()
             },
