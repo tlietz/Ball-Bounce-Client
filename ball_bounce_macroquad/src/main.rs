@@ -34,6 +34,7 @@ async fn main() {
     let platform_height = BORDER_W * 0.75;
 
     let ball_radius = platform_height * 0.4;
+    let mut ball_speed = BALL_START_SPEED;
     let mut ball_vel = vec2(0.0, 0.0);
     // Ball initialized sitting on the top of the platform,
     // randomly deviated from the center
