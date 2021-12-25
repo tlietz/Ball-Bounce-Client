@@ -19,7 +19,7 @@ const BORDER_W: f32 = 0.5;
 const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_COLOR: color::Color = RED;
-const BALL_START_SPEED: f32 = 15.;
+const BALL_START_SPEED: f32 = 10.;
 
 const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = 1.;
@@ -91,6 +91,23 @@ async fn main() {
                 bounce_ball(Axis::Y, &mut ball_vel);
             }
 
+            // ball hits platform.
+            // speed up the ball and increment score
+            if ball_x > platform_x - platform_width / 2.
+                && ball_x < platform_x + platform_width / 2.
+                && ball_y + ball_radius > SCREEN_H - (PLATFORM_FLOAT_H + platform_height)
+                && ball_y + ball_radius < SCREEN_H - (PLATFORM_FLOAT_H + platform_height / 2.)
+            {
+                ball_speed += 1.;
+                launch_ball(
+                    platform_x,
+                    PLATFORM_START_W,
+                    ball_x,
+                    ball_speed,
+                    &mut ball_vel,
+                );
+            }
+
             // ball goes out of bounds
             if ball_y + ball_radius >= SCREEN_H {
                 game_state = GameState::Ready;
@@ -121,6 +138,7 @@ fn new_ball_offset() -> f32 {
 
 // Launches the ball from the platform by changing its velocity correponding to where the ball hits the platform.
 // This is used when the ball hits the platform, or when launching the ball with spacebar.
+// The ball is launched at a maximum angle of 75 degrees with respect to the normal.
 fn launch_ball(
     platform_x: f32,
     platform_width: f32,
@@ -128,7 +146,13 @@ fn launch_ball(
     ball_speed: f32,
     ball_vel: &mut Vec2,
 ) {
-    let percent_offset = (ball_x - platform_x) / (platform_width / 2.);
+    let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
+    if percent_offset < -0.75 {
+        percent_offset = -0.75;
+    } else if percent_offset > 0.75 {
+        percent_offset = 0.75;
+    }
+
     ball_vel.x = percent_offset * ball_speed;
     ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
 }
