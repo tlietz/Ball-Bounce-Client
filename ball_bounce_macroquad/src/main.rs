@@ -114,7 +114,7 @@ async fn main() {
                 if ball_speed < BALL_START_SPEED * 2.5 {
                     ball_speed += SCREEN_H / 8.;
                 }
-                println!("{}", ball_speed);
+                // println!("{}", ball_speed);
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
