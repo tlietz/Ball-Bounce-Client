@@ -23,7 +23,7 @@ const BALL_START_SPEED: f32 = SCREEN_H / 1.5;
 
 const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = SCREEN_H * 0.025;
-const PLATFORM_START_W: f32 = SCREEN_W * 0.11;
+const PLATFORM_START_W: f32 = SCREEN_W * 0.1;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
@@ -93,19 +93,23 @@ async fn main() {
         if let GameState::Playing = game_state {
             ball_x += ball_vel.x * delta;
             ball_y += ball_vel.y * delta;
+            ball_speed = BALL_START_SPEED;
 
             // ball hit left or right boundary
-            if (ball_x - ball_radius < BORDER_W) || (ball_x + ball_radius > SCREEN_W - BORDER_W) {
+            if (ball_vel.x < 0. && ball_x - ball_radius < BORDER_W)
+                || (ball_vel.x > 0. && ball_x + ball_radius > SCREEN_W - BORDER_W)
+            {
                 bounce_ball(Axis::X, &mut ball_vel);
             }
             //ball hit top boundary
-            if ball_y - ball_radius < BORDER_W {
+            if ball_vel.y < 0. && ball_y - ball_radius < BORDER_W {
                 bounce_ball(Axis::Y, &mut ball_vel);
             }
 
             // ball hits platform.
             // speed up the ball and increment score
-            if ball_x + ball_radius > platform_x - platform_width / 2.
+            if ball_vel.y > 0.
+                && ball_x + ball_radius > platform_x - platform_width / 2.
                 && ball_x - ball_radius < platform_x + platform_width / 2.
                 && ball_y + ball_radius > SCREEN_H - (PLATFORM_FLOAT_H + platform_height)
                 && ball_y < SCREEN_H - (PLATFORM_FLOAT_H)
@@ -114,7 +118,7 @@ async fn main() {
                 if ball_speed < BALL_START_SPEED * 2.5 {
                     ball_speed += SCREEN_H / 8.;
                 }
-                // println!("{}", ball_speed);
+                println!("{}", ball_speed);
                 launch_ball(
                     platform_x,
                     PLATFORM_START_W,
