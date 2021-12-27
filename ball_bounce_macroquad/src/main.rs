@@ -7,11 +7,6 @@ enum GameState {
     Playing,
 }
 
-enum Axis {
-    X,
-    Y,
-}
-
 const SCREEN_W: f32 = 600.0;
 const SCREEN_H: f32 = 600.0;
 
@@ -98,11 +93,11 @@ async fn main() {
             if (ball_vel.x < 0. && ball_x - ball_radius < BORDER_W)
                 || (ball_vel.x > 0. && ball_x + ball_radius > SCREEN_W - BORDER_W)
             {
-                bounce_ball(Axis::X, &mut ball_vel);
+                ball_vel.x *= -1.;
             }
             //ball hit top boundary
             if ball_vel.y < 0. && ball_y - ball_radius < BORDER_W {
-                bounce_ball(Axis::Y, &mut ball_vel);
+                ball_vel.y *= -1.;
             }
 
             // ball hits platform.
@@ -191,14 +186,6 @@ fn launch_ball(
 
     ball_vel.x = percent_offset * ball_speed;
     ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
-}
-
-// bounces the ball across the axis passed in
-fn bounce_ball(axis: Axis, ball_vel: &mut Vec2) {
-    match axis {
-        Axis::X => ball_vel.x *= -1.,
-        Axis::Y => ball_vel.y *= -1.,
-    }
 }
 
 fn draw_border() {
