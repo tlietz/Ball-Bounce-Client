@@ -82,10 +82,14 @@ async fn initial_game_state() -> GameState {
     let players = vec![entity_index];
     entity_index += 1;
 
+    let ball_radius = platform_height * 0.5;
     let ball = Some(Entity::Ball(Ball {
-        position: Position { x: 300., y: 300. },
+        position: Position {
+            x: SCREEN_W / 2.,
+            y: SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H),
+        },
         velocity: Velocity { dx: 0., dy: 0. },
-        radius: PLATFORM_HEIGHT * 0.5,
+        radius: ball_radius,
         color: RED,
     }));
     entities.push(ball);
@@ -261,9 +265,6 @@ async fn main() {
         //     }
         // }
 
-        // draw platform
-        draw_border();
-
         render_system(&game_state);
 
         next_frame().await
@@ -298,15 +299,6 @@ fn launch_ball(
 
     ball_vel.x = percent_offset * ball_speed;
     ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
-}
-
-fn draw_border() {
-    // left border
-    draw_rectangle(0., 0., BORDER_W, SCREEN_H, BORDER_COLOR);
-    //right border
-    draw_rectangle(SCREEN_W - BORDER_W, 0., BORDER_W, SCREEN_H, BORDER_COLOR);
-    //top border
-    draw_rectangle(0., 0., SCREEN_W, BORDER_W, BORDER_COLOR);
 }
 
 fn draw_background() {
@@ -354,6 +346,7 @@ fn render_border(border: &Border) {
 fn render_system(game_state: &GameState) {
     draw_background();
 
+    // renders all entities
     for entity in &game_state.entities {
         match entity {
             Some(Entity::Ball(ball)) => render_ball(ball),
