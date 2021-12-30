@@ -48,9 +48,10 @@ struct GameState {
     balls: Vec<EntityIndex>,
     texts: Vec<EntityIndex>,
     score: u32,
+    font: Font,
 }
 
-fn initial_game_state() -> GameState {
+async fn initial_game_state() -> GameState {
     let mut entity_index: usize = 0;
     let mut entities = Vec::new();
 
@@ -79,12 +80,14 @@ fn initial_game_state() -> GameState {
     entities.push(text);
     let texts = vec![entity_index];
 
+    let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
     GameState {
         entities,
         players,
         balls,
         texts,
         score: 0,
+        font,
     }
 }
 
@@ -103,8 +106,6 @@ const PLATFORM_HEIGHT: f32 = BORDER_W * 0.75;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
-    let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
-
     // initialize platform center screen.
     let mut platform_x = SCREEN_W / 2.;
     let platform_speed = SCREEN_W / 2.;
@@ -121,7 +122,7 @@ async fn main() {
 
     let mut score: i32 = 0;
 
-    let mut game_state = initial_game_state();
+    let mut game_state = initial_game_state().await;
 
     loop {
         let delta = get_frame_time();
@@ -207,9 +208,6 @@ async fn main() {
         //     }
         // }
 
-        // draw background
-        draw_background();
-
         // draw platform
         draw_rectangle(
             platform_x - platform_width / 2.,
@@ -220,17 +218,6 @@ async fn main() {
         );
         draw_border();
 
-        // draw score
-        draw_text_ex(
-            &score.to_string(),
-            BORDER_W * 2.,
-            BORDER_W * 5.,
-            TextParams {
-                font_size: 50,
-                font,
-                ..Default::default()
-            },
-        );
         render_system(&game_state);
 
         next_frame().await
@@ -280,19 +267,35 @@ fn draw_background() {
     draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
 }
 
+fn render_ball(ball: &Ball) {
+    draw_circle(ball.position.x, ball.position.y, ball.radius, ball.color);
+}
+
+fn render_player(player: &Player) {}
+
+fn render_text(text: &Text) {}
+
 fn render_system(game_state: &GameState) {
     draw_background();
 
     for entity in &game_state.entities {
         match entity {
-            Some(Entity::Ball(ball)) => draw_ball(ball),
-            Some(Entity::Player(player)) => todo!(),
-            Some(Entity::Text(text)) => todo!(),
+            Some(Entity::Ball(ball)) => render_ball(ball),
+            Some(Entity::Player(player)) => render_player(player),
+            Some(Entity::Text(text)) => render_text(text),
             None => continue,
         }
     }
-}
 
-fn draw_ball(ball: &Ball) {
-    draw_circle(ball.position.x, ball.position.y, ball.radius, ball.color);
+    // draw score
+    draw_text_ex(
+        &game_state.score.to_string(),
+        BORDER_W * 2.,
+        BORDER_W * 5.,
+        TextParams {
+            font_size: 50,
+            font: game_state.font,
+            ..Default::default()
+        },
+    );
 }
