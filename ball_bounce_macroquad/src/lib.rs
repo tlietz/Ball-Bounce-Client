@@ -35,6 +35,7 @@ struct Ball {
 #[derive(Debug)]
 struct Player {
     position: Position,
+    speed: f32,
     width: f32,
     height: f32,
     control: Control,
@@ -80,11 +81,12 @@ pub async fn initial_game_state() -> GameState {
     let mut entities = Vec::new();
 
     let platform_height = SCREEN_W * 0.02;
-    let player = Some(Entity::Player(Player {
+    let player1 = Some(Entity::Player(Player {
         position: Position {
             x: SCREEN_W / 2.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
         },
+        speed: SCREEN_W / 2.,
         width: PLATFORM_START_W,
         height: platform_height,
         control: Control {
@@ -93,10 +95,27 @@ pub async fn initial_game_state() -> GameState {
         },
         color: WHITE,
     }));
-    entities.push(player);
-    let players = vec![entity_index];
+    entities.push(player1);
+    let mut players = vec![entity_index];
     entity_index += 1;
 
+    let player2 = Some(Entity::Player(Player {
+        position: Position {
+            x: SCREEN_W / 2.,
+            y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
+        },
+        speed: SCREEN_W / 2.,
+        width: PLATFORM_START_W,
+        height: platform_height,
+        control: Control {
+            left: KeyCode::Left,
+            right: KeyCode::Right,
+        },
+        color: PURPLE,
+    }));
+    entities.push(player2);
+    players.push(entity_index);
+    entity_index += 1;
     // Ball initialized sitting on the top of the player platform,
     // randomly deviated from the center
     let ball_radius = platform_height * 0.5;

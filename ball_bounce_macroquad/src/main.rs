@@ -1,6 +1,6 @@
 extern crate rand;
 
-use ball_bounce_macroquad::{systems::render_system, *};
+use ball_bounce_macroquad::{systems::*, *};
 use macroquad::prelude::*;
 
 #[macroquad::main("Ball Bounce")]
@@ -14,6 +14,7 @@ async fn main() {
     loop {
         let delta = get_frame_time();
 
+        player_control_system::execute(&mut game_state, delta);
         // if is_key_down(KeyCode::Right) && platform_x + platform_width / 2. < SCREEN_W - BORDER_W {
         //     platform_x += platform_speed * delta;
         // }
