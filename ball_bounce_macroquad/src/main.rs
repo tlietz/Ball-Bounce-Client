@@ -25,7 +25,9 @@ struct Ball {
 #[derive(Debug)]
 struct Player {
     position: Position,
-    velocity: Velocity,
+    width: f32,
+    height: f32,
+    color: color::Color,
 }
 
 #[derive(Debug)]
@@ -56,9 +58,15 @@ async fn initial_game_state() -> GameState {
     let mut entity_index: usize = 0;
     let mut entities = Vec::new();
 
+    let platform_height = SCREEN_W * 0.02;
     let player = Some(Entity::Player(Player {
-        position: Position { x: 300., y: 300. },
-        velocity: Velocity { dx: 0., dy: 0. },
+        position: Position {
+            x: SCREEN_W / 2.,
+            y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
+        },
+        width: SCREEN_W * 0.1,
+        height: platform_height,
+        color: WHITE,
     }));
     entities.push(player);
     let players = vec![entity_index];
@@ -126,7 +134,6 @@ async fn main() {
     let mut score: i32 = 0;
 
     let mut game_state = initial_game_state().await;
-
     loop {
         let delta = get_frame_time();
 
@@ -212,13 +219,6 @@ async fn main() {
         // }
 
         // draw platform
-        draw_rectangle(
-            platform_x - platform_width / 2.,
-            SCREEN_H - (PLATFORM_HEIGHT + PLATFORM_FLOAT_H),
-            platform_width,
-            PLATFORM_HEIGHT,
-            PLATFORM_COLOR,
-        );
         draw_border();
 
         render_system(&game_state);
@@ -274,7 +274,15 @@ fn render_ball(ball: &Ball) {
     draw_circle(ball.position.x, ball.position.y, ball.radius, ball.color);
 }
 
-fn render_player(player: &Player) {}
+fn render_player(player: &Player) {
+    draw_rectangle(
+        player.position.x - player.width / 2.,
+        SCREEN_H - (PLATFORM_HEIGHT + PLATFORM_FLOAT_H),
+        player.width,
+        player.height,
+        player.color,
+    );
+}
 
 fn render_text(text: &Text, font: Font) {
     draw_text_ex(
