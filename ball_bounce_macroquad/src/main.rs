@@ -38,10 +38,19 @@ struct Text {
 }
 
 #[derive(Debug)]
+struct Border {
+    position: Position,
+    width: f32,
+    height: f32,
+    color: color::Color,
+}
+
+#[derive(Debug)]
 enum Entity {
     Ball(Ball),
     Player(Player),
     Text(Text),
+    Border(Border),
 }
 
 type EntityIndex = usize;
@@ -50,6 +59,7 @@ struct GameState {
     players: Vec<EntityIndex>,
     balls: Vec<EntityIndex>,
     texts: Vec<EntityIndex>,
+    borders: Vec<EntityIndex>,
     score: u32,
     font: Font,
 }
@@ -93,12 +103,46 @@ async fn initial_game_state() -> GameState {
     entities.push(text);
     let texts = vec![entity_index];
 
+    let border_width = SCREEN_W * 0.025;
+    let left_border = Some(Entity::Border(Border {
+        position: Position { x: 0., y: 0. },
+        width: border_width,
+        height: SCREEN_H,
+        color: GRAY,
+    }));
+    entities.push(left_border);
+    let mut borders = vec![entity_index];
+    entity_index += 1;
+
+    let right_border = Some(Entity::Border(Border {
+        position: Position {
+            x: SCREEN_W - border_width,
+            y: 0.,
+        },
+        width: border_width,
+        height: SCREEN_H,
+        color: GRAY,
+    }));
+    entities.push(right_border);
+    borders.push(entity_index);
+    entity_index += 1;
+
+    let top_border = Some(Entity::Border(Border {
+        position: Position { x: 0., y: 0. },
+        width: SCREEN_W,
+        height: border_width,
+        color: GRAY,
+    }));
+    entities.push(top_border);
+    borders.push(entity_index);
+
     let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
     GameState {
         entities,
         players,
         balls,
         texts,
+        borders,
         score: 0,
         font,
     }
@@ -112,7 +156,6 @@ const BORDER_COLOR: color::Color = GRAY;
 
 const BALL_START_SPEED: f32 = SCREEN_H / 1.5;
 
-const PLATFORM_COLOR: color::Color = WHITE;
 const PLATFORM_FLOAT_H: f32 = SCREEN_H * 0.025;
 const PLATFORM_START_W: f32 = SCREEN_W * 0.1;
 const PLATFORM_HEIGHT: f32 = BORDER_W * 0.75;
@@ -298,6 +341,16 @@ fn render_text(text: &Text, font: Font) {
     );
 }
 
+fn render_border(border: &Border) {
+    draw_rectangle(
+        border.position.x,
+        border.position.y,
+        border.width,
+        border.height,
+        border.color,
+    );
+}
+
 fn render_system(game_state: &GameState) {
     draw_background();
 
@@ -306,6 +359,7 @@ fn render_system(game_state: &GameState) {
             Some(Entity::Ball(ball)) => render_ball(ball),
             Some(Entity::Player(player)) => render_player(player),
             Some(Entity::Text(text)) => render_text(text, game_state.font),
+            Some(Entity::Border(border)) => render_border(border),
             None => continue,
         }
     }
@@ -313,8 +367,8 @@ fn render_system(game_state: &GameState) {
     // draw score
     draw_text_ex(
         &game_state.score.to_string(),
-        BORDER_W * 2.,
-        BORDER_W * 5.,
+        SCREEN_W * 0.05,
+        SCREEN_W * 0.15,
         TextParams {
             font_size: 50,
             font: game_state.font,
