@@ -28,9 +28,16 @@ struct Player {
 }
 
 #[derive(Debug)]
+struct Text {
+    text: &'static str,
+    position: Position,
+}
+
+#[derive(Debug)]
 enum Entity {
     Ball(Ball),
     Player(Player),
+    Text(Text),
 }
 
 type EntityIndex = usize;
@@ -38,6 +45,7 @@ struct GameState {
     entities: Vec<Option<Entity>>,
     players: Vec<EntityIndex>,
     balls: Vec<EntityIndex>,
+    texts: Vec<EntityIndex>,
     score: u32,
 }
 
@@ -60,11 +68,20 @@ fn initial_game_state() -> GameState {
     }));
     entities.push(ball);
     let balls = vec![entity_index];
+    entity_index += 1;
+
+    let text = Some(Entity::Text(Text {
+        text: "Press spacebar to start",
+        position: Position { x: 300., y: 300. },
+    }));
+    entities.push(text);
+    let texts = vec![entity_index];
 
     GameState {
         entities,
         players,
         balls,
+        texts,
         score: 0,
     }
 }
@@ -262,3 +279,5 @@ fn draw_border() {
 fn draw_background() {
     draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
 }
+
+fn render_system(game_state: &mut GameState) {}
