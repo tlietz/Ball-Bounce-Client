@@ -85,7 +85,7 @@ async fn initial_game_state() -> GameState {
     let ball_radius = platform_height * 0.5;
     let ball = Some(Entity::Ball(Ball {
         position: Position {
-            x: SCREEN_W / 2.,
+            x: new_ball_offset() + SCREEN_W / 2.,
             y: SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H),
         },
         velocity: Velocity { dx: 0., dy: 0. },
@@ -176,9 +176,6 @@ async fn main() {
     // randomly deviated from the center
     let mut ball_offset: f32 = new_ball_offset();
     let mut ball_x = platform_x + ball_offset;
-    let mut ball_y = SCREEN_H - (ball_radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
-
-    let mut score: i32 = 0;
 
     let mut game_state = initial_game_state().await;
     loop {
