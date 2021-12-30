@@ -71,31 +71,19 @@ struct Border {
     color: color::Color,
 }
 
-#[derive(Debug)]
-enum Entity {
-    Ball(Ball),
-    Player(Player),
-    Text(Text),
-    Border(Border),
-}
-
 type EntityIndex = usize;
 pub struct GameState {
-    entities: Vec<Option<Entity>>,
-    players: Vec<EntityIndex>,
-    balls: Vec<EntityIndex>,
-    texts: Vec<EntityIndex>,
-    borders: Vec<EntityIndex>,
+    players: Vec<Player>,
+    balls: Vec<Ball>,
+    texts: Vec<Text>,
+    borders: Vec<Border>,
     score: u32,
     font: Font,
 }
 
 pub async fn initial_game_state() -> GameState {
-    let mut entity_index: EntityIndex = 0;
-    let mut entities = Vec::new();
-
     let platform_height = SCREEN_W * 0.02;
-    let player1 = Some(Entity::Player(Player {
+    let player1 = Player {
         position: Position {
             x: SCREEN_W / 2.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
@@ -108,12 +96,10 @@ pub async fn initial_game_state() -> GameState {
             right: KeyCode::D,
         },
         color: WHITE,
-    }));
-    entities.push(player1);
-    let mut players = vec![entity_index];
-    entity_index += 1;
+    };
+    let mut players = vec![player1];
 
-    let player2 = Some(Entity::Player(Player {
+    let player2 = Player {
         position: Position {
             x: SCREEN_W / 2.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
@@ -126,16 +112,14 @@ pub async fn initial_game_state() -> GameState {
             right: KeyCode::Right,
         },
         color: PURPLE,
-    }));
-    entities.push(player2);
-    players.push(entity_index);
-    entity_index += 1;
+    };
+    players.push(player2);
 
     // Ball initialized sitting on the top of a random player paddle,
     // randomly deviated from the center
     let ball_radius = platform_height * 0.5;
     let offset = new_ball_offset();
-    let ball = Some(Entity::Ball(Ball {
+    let ball = Ball {
         position: Position {
             x: offset + SCREEN_W / 2.,
             y: SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H),
@@ -143,38 +127,32 @@ pub async fn initial_game_state() -> GameState {
         velocity: Velocity { dx: 0., dy: 0. },
         radius: ball_radius,
         state: BallState::Ready {
-            player_entity_index: players[random_player_index(players.len())],
+            player_entity_index: random_player_index(players.len()),
             offset,
         },
         color: RED,
-    }));
-    entities.push(ball);
-    let balls = vec![entity_index];
-    entity_index += 1;
+    };
+    let balls = vec![ball];
 
-    let text = Some(Entity::Text(Text {
+    let text = Text {
         text: "Press spacebar to start",
         position: Position {
             x: SCREEN_W * 0.1,
             y: SCREEN_H * 0.4,
         },
         font_size: 40,
-    }));
-    entities.push(text);
-    let texts = vec![entity_index];
-    entity_index += 1;
+    };
+    let texts = vec![text];
 
-    let left_border = Some(Entity::Border(Border {
+    let left_border = Border {
         position: Position { x: 0., y: 0. },
         width: BORDER_W,
         height: SCREEN_H,
         color: GRAY,
-    }));
-    entities.push(left_border);
-    let mut borders = vec![entity_index];
-    entity_index += 1;
+    };
+    let mut borders = vec![left_border];
 
-    let right_border = Some(Entity::Border(Border {
+    let right_border = Border {
         position: Position {
             x: SCREEN_W - BORDER_W,
             y: 0.,
@@ -182,23 +160,19 @@ pub async fn initial_game_state() -> GameState {
         width: BORDER_W,
         height: SCREEN_H,
         color: GRAY,
-    }));
-    entities.push(right_border);
-    borders.push(entity_index);
-    entity_index += 1;
+    };
+    borders.push(right_border);
 
-    let top_border = Some(Entity::Border(Border {
+    let top_border = Border {
         position: Position { x: 0., y: 0. },
         width: SCREEN_W,
         height: BORDER_W,
         color: GRAY,
-    }));
-    entities.push(top_border);
-    borders.push(entity_index);
+    };
+    borders.push(top_border);
 
     let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
     GameState {
-        entities,
         players,
         balls,
         texts,

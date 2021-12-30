@@ -5,14 +5,17 @@ pub fn render(game_state: &GameState) {
     render_background();
 
     // renders all entities
-    for entity in &game_state.entities {
-        match entity {
-            Some(Entity::Ball(ball)) => render_ball(ball),
-            Some(Entity::Player(player)) => render_player(player),
-            Some(Entity::Text(text)) => render_text(text, game_state.font),
-            Some(Entity::Border(border)) => render_border(border),
-            None => continue,
-        }
+    for ball in &game_state.balls {
+        render_ball(ball)
+    }
+    for player in &game_state.players {
+        render_player(player)
+    }
+    for border in &game_state.borders {
+        render_border(border)
+    }
+    for text in &game_state.texts {
+        render_text(text, game_state.font)
     }
 
     // draw score
