@@ -38,6 +38,7 @@ struct GameState {
     entities: Vec<Option<Entity>>,
     players: Vec<EntityIndex>,
     balls: Vec<EntityIndex>,
+    score: u32,
 }
 
 fn initial_game_state() -> GameState {
@@ -60,12 +61,11 @@ fn initial_game_state() -> GameState {
     entities.push(ball);
     let balls = vec![entity_index];
 
-    println!("{:?}", entities[0]);
-
     GameState {
         entities,
         players,
         balls,
+        score: 0,
     }
 }
 
