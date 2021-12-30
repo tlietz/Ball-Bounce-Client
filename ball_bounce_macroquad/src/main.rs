@@ -1,15 +1,14 @@
 extern crate rand;
 
-use ball_bounce_macroquad::*;
+use ball_bounce_macroquad::{systems::render_system, *};
 use macroquad::prelude::*;
-use rand::Rng;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
     // initialize platform center screen.
-    let mut platform_x = SCREEN_W / 2.;
-    let platform_speed = SCREEN_W / 2.;
-    let platform_width = PLATFORM_START_W;
+    // let mut platform_x = SCREEN_W / 2.;
+    // let platform_speed = SCREEN_W / 2.;
+    // let platform_width = PLATFORM_START_W;
 
     let mut game_state = initial_game_state().await;
     loop {
@@ -96,34 +95,8 @@ async fn main() {
         //     }
         // }
 
-        render_system(&game_state);
+        render_system::render(&game_state);
 
         next_frame().await
     }
-}
-
-// Launches the ball from the platform by changing its velocity corresponding to where the ball hits the platform.
-// This is used when the ball hits the platform, or when launching the ball with spacebar.
-// The ball is launched at a maximum angle with respect to the normal.
-fn launch_ball(
-    platform_x: f32,
-    platform_width: f32,
-    ball_x: f32,
-    ball_speed: f32,
-    ball_vel: &mut Vec2,
-) {
-    // maximum offset calculated to determine angle of launch
-    let max_offset = 0.7;
-    let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
-    if percent_offset < -max_offset {
-        percent_offset = -max_offset;
-    } else if percent_offset > max_offset {
-        percent_offset = max_offset;
-    } else if percent_offset == 0.00 {
-        // if the ball hits the center of platform, launch at a random angle
-        percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
-    }
-
-    ball_vel.x = percent_offset * ball_speed;
-    ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
 }
