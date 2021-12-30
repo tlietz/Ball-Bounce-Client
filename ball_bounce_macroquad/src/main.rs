@@ -2,6 +2,18 @@ extern crate rand;
 use macroquad::{color, prelude::*};
 use rand::Rng;
 
+struct Position {
+    x: f32,
+    y: f32,
+}
+
+struct Velocity {
+    dx: f32,
+    dy: f32,
+}
+
+struct Sprite(Texture2D);
+
 enum GameState {
     Ready,
     Playing,
