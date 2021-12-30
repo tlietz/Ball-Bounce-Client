@@ -6,7 +6,7 @@ use constants::*;
 use macroquad::{color, prelude::*};
 use rand::Rng;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Position {
     x: f32,
     y: f32,
@@ -35,12 +35,14 @@ struct Ball {
 
 #[derive(Debug)]
 enum BallState {
-    // The usize in the Ready() variant corresponds to a player
-    // index in the `players` vec in the GameState struct.
-    //
-    // This determines which player the ball will follow before
+    // `player_entity_index` determines which player the ball will follow before
     // the game starts.
-    Ready(usize),
+    //
+    // `offset` determines the offset the ball has from the center of the player's paddle.
+    Ready {
+        player_entity_index: EntityIndex,
+        offset: f32,
+    },
     Playing,
 }
 
@@ -89,7 +91,7 @@ pub struct GameState {
 }
 
 pub async fn initial_game_state() -> GameState {
-    let mut entity_index: usize = 0;
+    let mut entity_index: EntityIndex = 0;
     let mut entities = Vec::new();
 
     let platform_height = SCREEN_W * 0.02;
@@ -128,17 +130,22 @@ pub async fn initial_game_state() -> GameState {
     entities.push(player2);
     players.push(entity_index);
     entity_index += 1;
-    // Ball initialized sitting on the top of the player platform,
+
+    // Ball initialized sitting on the top of a random player paddle,
     // randomly deviated from the center
     let ball_radius = platform_height * 0.5;
+    let offset = new_ball_offset();
     let ball = Some(Entity::Ball(Ball {
         position: Position {
-            x: new_ball_offset() + SCREEN_W / 2.,
+            x: offset + SCREEN_W / 2.,
             y: SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H),
         },
         velocity: Velocity { dx: 0., dy: 0. },
         radius: ball_radius,
-        state: BallState::Ready(0),
+        state: BallState::Ready {
+            player_entity_index: players[random_player_index(players.len())],
+            offset,
+        },
         color: RED,
     }));
     entities.push(ball);
@@ -155,6 +162,7 @@ pub async fn initial_game_state() -> GameState {
     }));
     entities.push(text);
     let texts = vec![entity_index];
+    entity_index += 1;
 
     let left_border = Some(Entity::Border(Border {
         position: Position { x: 0., y: 0. },
@@ -198,6 +206,10 @@ pub async fn initial_game_state() -> GameState {
         score: 0,
         font,
     }
+}
+
+fn random_player_index(num_players: usize) -> usize {
+    rand::thread_rng().gen_range(0..num_players)
 }
 
 fn new_ball_offset() -> f32 {
