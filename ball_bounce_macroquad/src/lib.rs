@@ -29,7 +29,19 @@ struct Ball {
     position: Position,
     velocity: Velocity,
     radius: f32,
+    state: BallState,
     color: color::Color,
+}
+
+#[derive(Debug)]
+enum BallState {
+    // The usize in the Ready() variant corresponds to a player
+    // index in the `players` vec in the GameState struct.
+    //
+    // This determines which player the ball will follow before
+    // the game starts.
+    Ready(usize),
+    Playing,
 }
 
 #[derive(Debug)]
@@ -126,6 +138,7 @@ pub async fn initial_game_state() -> GameState {
         },
         velocity: Velocity { dx: 0., dy: 0. },
         radius: ball_radius,
+        state: BallState::Ready(0),
         color: RED,
     }));
     entities.push(ball);

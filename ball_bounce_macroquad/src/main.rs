@@ -15,14 +15,8 @@ async fn main() {
         let delta = get_frame_time();
 
         player_control_system::execute(&mut game_state, delta);
-        // if is_key_down(KeyCode::Right) && platform_x + platform_width / 2. < SCREEN_W - BORDER_W {
-        //     platform_x += platform_speed * delta;
-        // }
 
-        // if is_key_down(KeyCode::Left) && platform_x - platform_width / 2. > BORDER_W {
-        //     platform_x -= platform_speed * delta;
-        // }
-
+        ball_control_system::execute(&mut game_state, delta);
         // if let GameState::Ready = game_state {
         //     // ball tracks the platform
         //     ball_y = SCREEN_H - (ball_radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
