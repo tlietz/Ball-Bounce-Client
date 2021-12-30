@@ -143,10 +143,9 @@ pub async fn initial_game_state() -> GameState {
     entities.push(text);
     let texts = vec![entity_index];
 
-    let border_width = SCREEN_W * 0.025;
     let left_border = Some(Entity::Border(Border {
         position: Position { x: 0., y: 0. },
-        width: border_width,
+        width: BORDER_W,
         height: SCREEN_H,
         color: GRAY,
     }));
@@ -156,10 +155,10 @@ pub async fn initial_game_state() -> GameState {
 
     let right_border = Some(Entity::Border(Border {
         position: Position {
-            x: SCREEN_W - border_width,
+            x: SCREEN_W - BORDER_W,
             y: 0.,
         },
-        width: border_width,
+        width: BORDER_W,
         height: SCREEN_H,
         color: GRAY,
     }));
@@ -170,7 +169,7 @@ pub async fn initial_game_state() -> GameState {
     let top_border = Some(Entity::Border(Border {
         position: Position { x: 0., y: 0. },
         width: SCREEN_W,
-        height: border_width,
+        height: BORDER_W,
         color: GRAY,
     }));
     entities.push(top_border);
