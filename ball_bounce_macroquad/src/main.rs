@@ -15,6 +15,12 @@ struct Velocity {
 }
 
 #[derive(Debug)]
+struct Control {
+    left: KeyCode,
+    right: KeyCode,
+}
+
+#[derive(Debug)]
 struct Ball {
     position: Position,
     velocity: Velocity,
@@ -27,6 +33,7 @@ struct Player {
     position: Position,
     width: f32,
     height: f32,
+    control: Control,
     color: color::Color,
 }
 
@@ -76,6 +83,10 @@ async fn initial_game_state() -> GameState {
         },
         width: SCREEN_W * 0.1,
         height: platform_height,
+        control: Control {
+            left: KeyCode::A,
+            right: KeyCode::D,
+        },
         color: WHITE,
     }));
     entities.push(player);
