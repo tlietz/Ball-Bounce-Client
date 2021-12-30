@@ -32,6 +32,7 @@ struct Player {
 struct Text {
     text: &'static str,
     position: Position,
+    font_size: u16,
 }
 
 #[derive(Debug)]
@@ -75,7 +76,11 @@ async fn initial_game_state() -> GameState {
 
     let text = Some(Entity::Text(Text {
         text: "Press spacebar to start",
-        position: Position { x: 300., y: 300. },
+        position: Position {
+            x: SCREEN_W * 0.1,
+            y: SCREEN_H * 0.4,
+        },
+        font_size: 40,
     }));
     entities.push(text);
     let texts = vec![entity_index];
@@ -112,8 +117,6 @@ async fn main() {
     let platform_width = PLATFORM_START_W;
 
     let ball_radius = PLATFORM_HEIGHT * 0.5;
-    let mut ball_speed = BALL_START_SPEED;
-    let mut ball_vel = vec2(0.0, 0.0);
     // Ball initialized sitting on the top of the platform,
     // randomly deviated from the center
     let mut ball_offset: f32 = new_ball_offset();
@@ -273,7 +276,19 @@ fn render_ball(ball: &Ball) {
 
 fn render_player(player: &Player) {}
 
-fn render_text(text: &Text) {}
+fn render_text(text: &Text, font: Font) {
+    draw_text_ex(
+        text.text,
+        text.position.x,
+        text.position.y,
+        TextParams {
+            font_size: text.font_size,
+            font,
+            color: BLACK,
+            ..Default::default()
+        },
+    );
+}
 
 fn render_system(game_state: &GameState) {
     draw_background();
@@ -282,7 +297,7 @@ fn render_system(game_state: &GameState) {
         match entity {
             Some(Entity::Ball(ball)) => render_ball(ball),
             Some(Entity::Player(player)) => render_player(player),
-            Some(Entity::Text(text)) => render_text(text),
+            Some(Entity::Text(text)) => render_text(text, game_state.font),
             None => continue,
         }
     }
