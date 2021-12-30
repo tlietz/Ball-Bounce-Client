@@ -19,6 +19,7 @@ struct Ball {
     position: Position,
     velocity: Velocity,
     radius: f32,
+    color: color::Color,
 }
 
 #[derive(Debug)]
@@ -65,6 +66,7 @@ fn initial_game_state() -> GameState {
         position: Position { x: 300., y: 300. },
         velocity: Velocity { dx: 0., dy: 0. },
         radius: PLATFORM_HEIGHT * 0.5,
+        color: RED,
     }));
     entities.push(ball);
     let balls = vec![entity_index];
@@ -92,7 +94,6 @@ const SCREEN_H: f32 = 600.0;
 const BORDER_W: f32 = SCREEN_W * 0.025;
 const BORDER_COLOR: color::Color = GRAY;
 
-const BALL_COLOR: color::Color = RED;
 const BALL_START_SPEED: f32 = SCREEN_H / 1.5;
 
 const PLATFORM_COLOR: color::Color = WHITE;
@@ -209,8 +210,6 @@ async fn main() {
         // draw background
         draw_background();
 
-        // draw ball
-        draw_circle(ball_x, ball_y, ball_radius, BALL_COLOR);
         // draw platform
         draw_rectangle(
             platform_x - platform_width / 2.,
@@ -232,6 +231,7 @@ async fn main() {
                 ..Default::default()
             },
         );
+        render_system(&game_state);
 
         next_frame().await
     }
@@ -280,4 +280,19 @@ fn draw_background() {
     draw_rectangle(0.0, 0.0, SCREEN_W, SCREEN_H, DARKBLUE);
 }
 
-fn render_system(game_state: &mut GameState) {}
+fn render_system(game_state: &GameState) {
+    draw_background();
+
+    for entity in &game_state.entities {
+        match entity {
+            Some(Entity::Ball(ball)) => draw_ball(ball),
+            Some(Entity::Player(player)) => todo!(),
+            Some(Entity::Text(text)) => todo!(),
+            None => continue,
+        }
+    }
+}
+
+fn draw_ball(ball: &Ball) {
+    draw_circle(ball.position.x, ball.position.y, ball.radius, ball.color);
+}
