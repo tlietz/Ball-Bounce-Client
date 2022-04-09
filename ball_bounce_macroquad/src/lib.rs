@@ -32,6 +32,7 @@ struct Control {
 struct Ball {
     position: Position,
     velocity: Velocity,
+    speed: f32,
     radius: f32,
     state: BallState,
     color: color::Color,
@@ -86,15 +87,14 @@ pub struct GameState {
 }
 
 pub async fn initial_game_state() -> GameState {
-    let platform_height = SCREEN_W * 0.02;
     let player1 = Player {
         position: Position {
             x: SCREEN_W / 4.,
-            y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
+            y: SCREEN_H - (PLATFORM_FLOAT_H + PLATFORM_HEIGHT),
         },
         speed: SCREEN_W / 2.,
         width: PLATFORM_START_W,
-        height: platform_height,
+        height: PLATFORM_HEIGHT,
         control: Control {
             left: KeyCode::A,
             right: KeyCode::D,
@@ -106,11 +106,11 @@ pub async fn initial_game_state() -> GameState {
     let player2 = Player {
         position: Position {
             x: SCREEN_W * 3. / 4.,
-            y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
+            y: SCREEN_H - (PLATFORM_FLOAT_H + PLATFORM_HEIGHT),
         },
         speed: SCREEN_W / 2.,
         width: PLATFORM_START_W,
-        height: platform_height,
+        height: PLATFORM_HEIGHT,
         control: Control {
             left: KeyCode::Left,
             right: KeyCode::Right,
@@ -121,14 +121,15 @@ pub async fn initial_game_state() -> GameState {
 
     // Ball initialized sitting on the top of a random player paddle,
     // randomly deviated from the center
-    let ball_radius = platform_height * 0.5;
-    let offset = new_ball_offset();
+    let ball_radius = PLATFORM_HEIGHT * 0.5;
+    let offset = rand_ball_offset();
     let ball = Ball {
         position: Position {
             x: offset + SCREEN_W / 2.,
-            y: SCREEN_H - (ball_radius + platform_height + PLATFORM_FLOAT_H),
+            y: SCREEN_H - (ball_radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H),
         },
         velocity: Velocity { dx: 0., dy: 0. },
+        speed: BALL_START_SPEED,
         radius: ball_radius,
         state: BallState::Ready {
             player_entity_index: random_player_index(players.len()),
@@ -190,6 +191,6 @@ fn random_player_index(num_players: usize) -> usize {
     rand::thread_rng().gen_range(0..num_players)
 }
 
-fn new_ball_offset() -> f32 {
+fn rand_ball_offset() -> f32 {
     rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
 }

@@ -25,7 +25,51 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
                 ball.state = BallState::Playing;
             }
         }
-        BallState::Playing => {}
+        BallState::Playing => {
+            for player in &game_state.players {
+                ball.position.x += ball.velocity.dx * delta;
+                ball.position.y += ball.velocity.dy * delta;
+
+                // ball hit left or right boundary
+                if (ball.velocity.dx < 0. && ball.position.x - ball.radius < BORDER_W)
+                    || (ball.velocity.dx > 0.
+                        && ball.position.x + ball.radius > SCREEN_W - BORDER_W)
+                {
+                    ball.velocity.dx *= -1.;
+                }
+                //ball hit top boundary
+                if ball.velocity.dy < 0. && ball.position.y - ball.radius < BORDER_W {
+                    ball.velocity.dy *= -1.;
+                }
+
+                // ball hits platform.
+                // speed up the ball and increment score
+                if ball.velocity.dy > 0.
+                    && ball.position.x + ball.radius > player.position.x - player.width / 2.
+                    && ball.position.x - ball.radius < player.position.x + player.width / 2.
+                    && ball.position.y + ball.radius
+                        > SCREEN_H - (PLATFORM_FLOAT_H + PLATFORM_HEIGHT)
+                    && ball.position.y < SCREEN_H - (PLATFORM_FLOAT_H)
+                {
+                    game_state.score += 1;
+                    if ball.speed < BALL_START_SPEED * 2.5 {
+                        ball.speed += SCREEN_H / 8.;
+                    }
+                    launch_ball(ball, player);
+                }
+
+                // ball goes out of bounds
+                // reinitiliaze variables for new game.
+                if ball.position.y + ball.radius >= SCREEN_H {
+                    ball.state = BallState::Ready {
+                        player_entity_index: random_player_index(game_state.players.len()),
+                        offset: rand_ball_offset(),
+                    };
+                    ball.position.y = SCREEN_H - (ball.radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
+                    ball.speed = BALL_START_SPEED;
+                }
+            }
+        }
     }
 }
 
@@ -45,6 +89,6 @@ fn launch_ball(ball: &mut Ball, player: &Player) {
         percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
     }
 
-    ball.velocity.dx = percent_offset * BALL_START_SPEED;
-    ball.velocity.dy = -(1. - percent_offset.abs()) * BALL_START_SPEED;
+    ball.velocity.dx = percent_offset * ball.speed;
+    ball.velocity.dy = -(1. - percent_offset.abs()) * ball.speed;
 }
