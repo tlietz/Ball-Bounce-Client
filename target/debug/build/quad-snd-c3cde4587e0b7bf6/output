@@ -1,2 +1,0 @@
-cargo:rustc-link-lib=framework=CoreAudio
-cargo:rustc-link-lib=framework=AudioToolbox
