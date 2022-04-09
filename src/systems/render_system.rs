@@ -13,8 +13,14 @@ pub fn render(game_state: &GameState) {
     for border in &game_state.borders {
         render_border(border)
     }
-    for text in &game_state.texts {
-        render_text(text, game_state.font)
+    if let BallState::Ready {
+        player_entity_index: _,
+        offset: _,
+    } = game_state.balls[0].state
+    {
+        for text in &game_state.texts {
+            render_text(text, game_state.font)
+        }
     }
 
     draw_score(&game_state);
