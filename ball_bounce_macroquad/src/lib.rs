@@ -173,7 +173,7 @@ pub async fn initial_game_state() -> GameState {
     };
     borders.push(top_border);
 
-    let font = load_ttf_font("../assets/MinimalPixelv2.ttf").await.unwrap();
+    let font = load_ttf_font("assets/MinimalPixelv2.ttf").await.unwrap();
     GameState {
         players,
         balls,
