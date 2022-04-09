@@ -59,12 +59,7 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
                 // ball goes out of bounds
                 // reinitiliaze variables for new game.
                 if ball.position.y + ball.radius >= SCREEN_H {
-                    ball.state = BallState::Ready {
-                        player_entity_index: random_player_index(game_state.players.len()),
-                        offset: rand_ball_offset(),
-                    };
-                    ball.position.y = SCREEN_H - (ball.radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
-                    ball.speed = BALL_START_SPEED;
+                    restart_ball(ball, random_player_index(game_state.players.len()))
                 }
             }
         }

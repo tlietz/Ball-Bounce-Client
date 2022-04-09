@@ -195,3 +195,12 @@ fn rand_ball_offset() -> f32 {
         (PLATFORM_START_W / 2.) * 0.5,
     )
 }
+
+fn restart_ball(ball: &mut Ball, player_index: EntityIndex) {
+    ball.state = BallState::Ready {
+        player_entity_index: player_index,
+        offset: rand_ball_offset(),
+    };
+    ball.position.y = SCREEN_H - (ball.radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
+    ball.speed = BALL_START_SPEED;
+}
