@@ -21,7 +21,7 @@ The `Player` and `Ball` are entities, which are represented by `struct`s.
 `Velocity`, `Position`, and `Control` are components, which are also represented by `struct`s. Entities can have any number of components depending on what characteristics they need. For example, the `Ball` entity does not have a `Control` component, but the `Player` entities do.
 
 Systems are functions that control everything.
-All of the complexity of the game logic is contained in the systems. This made it easy to know where features of the game should be created during the game. If we were to use OOP, it would not be as easy because games have many features that require the interaction between mutliple objects. 
+All of the complexity of the game logic is contained in the systems. This makes it easy to know where features of the game should be created in the code. If we were to use OOP, it would not be as easy because games have many features that require the interaction between mutliple objects. 
 
 For example, let's look at adding the feature of bouncing a ball off a paddle with a `bounce()` function. 
 
