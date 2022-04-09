@@ -27,7 +27,7 @@ For example, let's look at adding the feature of bouncing a ball off a paddle.
 In OOP, we would have to decide whether to add the method to the `Ball` or `Player` object. Does a ball bounce off the paddle, or does the paddle bounce the ball?
 
 In ECS, a system takes in the `game_state` and determines what happens. 
-The system is external to both the `Ball` and the `Player`, so we no longer have to worry about which one to put a method on like we would with OOP.
+The system is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
 
 ## Future Work
 
