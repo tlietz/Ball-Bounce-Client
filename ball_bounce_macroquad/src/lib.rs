@@ -1,3 +1,7 @@
+// Uses ECS (Entity component system) design pattern.
+// Note how the complexity lives in the systems, instead
+// of the objects defined here in `lib`.
+
 mod constants;
 pub mod systems;
 
@@ -88,7 +92,7 @@ pub async fn initial_game_state() -> GameState {
             x: SCREEN_W / 4.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
         },
-        speed: SCREEN_W / 4.,
+        speed: SCREEN_W / 2.,
         width: PLATFORM_START_W,
         height: platform_height,
         control: Control {
@@ -104,7 +108,7 @@ pub async fn initial_game_state() -> GameState {
             x: SCREEN_W * 3. / 4.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
         },
-        speed: SCREEN_W * 3. / 4.,
+        speed: SCREEN_W / 2.,
         width: PLATFORM_START_W,
         height: platform_height,
         control: Control {

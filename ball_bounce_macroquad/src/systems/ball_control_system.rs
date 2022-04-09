@@ -12,11 +12,16 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
             offset,
         } => {
             // follows the paddle of the player
-            let player_x = game_state.players[player_entity_index.clone()].position.x;
+            let player = &game_state.players[player_entity_index.clone()];
+            let player_x = player.position.x;
 
             ball.position.x = player_x + offset.clone();
 
             if is_key_down(KeyCode::Space) {
+                // launching the ball must come before changing the state,
+                // because the `launch_ball` function uses the `player_entity_index`
+                // varible from BallState::Ready enum
+                launch_ball(ball, player);
                 ball.state = BallState::Playing;
             }
         }
@@ -27,16 +32,10 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
 // Launches the ball from the platform by changing its velocity corresponding to where the ball hits the platform.
 // This is used when the ball hits the platform, or when launching the ball with spacebar.
 // The ball is launched at a maximum angle with respect to the normal.
-fn launch_ball(
-    platform_x: f32,
-    platform_width: f32,
-    ball_x: f32,
-    ball_speed: f32,
-    ball_vel: &mut Vec2,
-) {
+fn launch_ball(ball: &mut Ball, player: &Player) {
     // maximum offset calculated to determine angle of launch
     let max_offset = 0.7;
-    let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
+    let mut percent_offset = (ball.position.x - player.position.x) / (player.width / 2.);
     if percent_offset < -max_offset {
         percent_offset = -max_offset;
     } else if percent_offset > max_offset {
@@ -46,6 +45,6 @@ fn launch_ball(
         percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
     }
 
-    ball_vel.x = percent_offset * ball_speed;
-    ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
+    ball.velocity.dx = percent_offset * BALL_START_SPEED;
+    ball.velocity.dy = -(1. - percent_offset.abs()) * BALL_START_SPEED;
 }
