@@ -33,6 +33,7 @@ struct Ball {
     color: color::Color,
 }
 
+type EntityIndex = usize;
 #[derive(Debug)]
 enum BallState {
     // `player_entity_index` determines which player the ball will follow before
@@ -71,7 +72,6 @@ struct Border {
     color: color::Color,
 }
 
-type EntityIndex = usize;
 pub struct GameState {
     players: Vec<Player>,
     balls: Vec<Ball>,
@@ -85,10 +85,10 @@ pub async fn initial_game_state() -> GameState {
     let platform_height = SCREEN_W * 0.02;
     let player1 = Player {
         position: Position {
-            x: SCREEN_W / 2.,
+            x: SCREEN_W / 4.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
         },
-        speed: SCREEN_W / 2.,
+        speed: SCREEN_W / 4.,
         width: PLATFORM_START_W,
         height: platform_height,
         control: Control {
@@ -101,10 +101,10 @@ pub async fn initial_game_state() -> GameState {
 
     let player2 = Player {
         position: Position {
-            x: SCREEN_W / 2.,
+            x: SCREEN_W * 3. / 4.,
             y: SCREEN_H - (PLATFORM_FLOAT_H + platform_height),
         },
-        speed: SCREEN_W / 2.,
+        speed: SCREEN_W * 3. / 4.,
         width: PLATFORM_START_W,
         height: platform_height,
         control: Control {
@@ -188,30 +188,4 @@ fn random_player_index(num_players: usize) -> usize {
 
 fn new_ball_offset() -> f32 {
     rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
-}
-
-// Launches the ball from the platform by changing its velocity corresponding to where the ball hits the platform.
-// This is used when the ball hits the platform, or when launching the ball with spacebar.
-// The ball is launched at a maximum angle with respect to the normal.
-fn launch_ball(
-    platform_x: f32,
-    platform_width: f32,
-    ball_x: f32,
-    ball_speed: f32,
-    ball_vel: &mut Vec2,
-) {
-    // maximum offset calculated to determine angle of launch
-    let max_offset = 0.7;
-    let mut percent_offset = (ball_x - platform_x) / (platform_width / 2.);
-    if percent_offset < -max_offset {
-        percent_offset = -max_offset;
-    } else if percent_offset > max_offset {
-        percent_offset = max_offset;
-    } else if percent_offset == 0.00 {
-        // if the ball hits the center of platform, launch at a random angle
-        percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
-    }
-
-    ball_vel.x = percent_offset * ball_speed;
-    ball_vel.y = -(1. - percent_offset.abs()) * ball_speed;
 }

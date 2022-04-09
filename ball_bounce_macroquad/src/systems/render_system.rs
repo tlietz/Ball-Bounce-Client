@@ -4,7 +4,6 @@ use macroquad::prelude::*;
 pub fn render(game_state: &GameState) {
     render_background();
 
-    // renders all entities
     for ball in &game_state.balls {
         render_ball(ball)
     }
@@ -18,17 +17,7 @@ pub fn render(game_state: &GameState) {
         render_text(text, game_state.font)
     }
 
-    // draw score
-    draw_text_ex(
-        &game_state.score.to_string(),
-        SCREEN_W * 0.05,
-        SCREEN_W * 0.15,
-        TextParams {
-            font_size: 50,
-            font: game_state.font,
-            ..Default::default()
-        },
-    );
+    draw_score(&game_state);
 }
 
 fn render_background() {
@@ -70,5 +59,18 @@ fn render_border(border: &Border) {
         border.width,
         border.height,
         border.color,
+    );
+}
+
+fn draw_score(game_state: &GameState) {
+    draw_text_ex(
+        &game_state.score.to_string(),
+        SCREEN_W * 0.05,
+        SCREEN_W * 0.15,
+        TextParams {
+            font_size: 50,
+            font: game_state.font,
+            ..Default::default()
+        },
     );
 }

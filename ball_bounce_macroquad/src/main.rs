@@ -5,11 +5,6 @@ use macroquad::prelude::*;
 
 #[macroquad::main("Ball Bounce")]
 async fn main() {
-    // initialize platform center screen.
-    // let mut platform_x = SCREEN_W / 2.;
-    // let platform_speed = SCREEN_W / 2.;
-    // let platform_width = PLATFORM_START_W;
-
     let mut game_state = initial_game_state().await;
     loop {
         let delta = get_frame_time();
