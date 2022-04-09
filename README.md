@@ -23,10 +23,11 @@ The `Player` and `Ball` are entities, which are represented by `struct`s.
 Systems are functions that control everything.
 All of the complexity of the game logic is contained in the systems. This made it easy to know where features of the game should be created during the game. If we were to use OOP, it would not be as easy because games have many features that require the interaction between mutliple objects. 
 
-For example, let's look at adding the feature of bouncing a ball off a paddle. 
-In OOP, we would have to decide whether to add the method to the `Ball` or `Player` object. Does a ball bounce off the paddle, or does the paddle bounce the ball?
+For example, let's look at adding the feature of bouncing a ball off a paddle with a `bounce()` function. 
 
-In ECS, a system takes in the `game_state` and determines what happens. 
+In OOP, we would have to decide whether to add `bounce()` to the `Ball` or `Player` object. Does a ball bounce off the paddle, or does the paddle bounce the ball?
+
+In ECS, a system takes in the `game_state` and determines when to call `bounce()`. 
 The system is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
 
 ## Future Work
