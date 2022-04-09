@@ -186,7 +186,7 @@ pub async fn initial_game_state() -> GameState {
 }
 
 fn random_player_index(num_players: usize) -> usize {
-    rand::gen_range(0, num_players - 1)
+    rand::gen_range(0, num_players)
 }
 
 fn rand_ball_offset() -> f32 {
