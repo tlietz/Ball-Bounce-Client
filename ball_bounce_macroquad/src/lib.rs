@@ -5,10 +5,8 @@
 mod constants;
 pub mod systems;
 
-extern crate rand;
 use constants::*;
-use macroquad::{color, prelude::*};
-use rand::Rng;
+use macroquad::{color, prelude::*, rand};
 
 #[derive(Debug, Clone)]
 struct Position {
@@ -188,9 +186,12 @@ pub async fn initial_game_state() -> GameState {
 }
 
 fn random_player_index(num_players: usize) -> usize {
-    rand::thread_rng().gen_range(0..num_players)
+    rand::gen_range(0, num_players - 1)
 }
 
 fn rand_ball_offset() -> f32 {
-    rand::thread_rng().gen_range(((-PLATFORM_START_W / 2.) * 0.5)..=((PLATFORM_START_W / 2.) * 0.5))
+    rand::gen_range(
+        (-PLATFORM_START_W / 2.) * 0.5,
+        (PLATFORM_START_W / 2.) * 0.5,
+    )
 }

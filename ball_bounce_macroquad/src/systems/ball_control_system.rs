@@ -1,7 +1,5 @@
 use crate::*;
-use macroquad::prelude::*;
-
-extern crate rand;
+use macroquad::{prelude::*, rand};
 
 pub fn execute(game_state: &mut GameState, delta: f32) {
     // Hard coded for 1 ball. There might be multiple balls added later.
@@ -86,7 +84,7 @@ fn launch_ball(ball: &mut Ball, player: &Player) {
         percent_offset = max_offset;
     } else if percent_offset == 0.00 {
         // if the ball hits the center of platform, launch at a random angle
-        percent_offset = rand::thread_rng().gen_range(-0.10..=0.10)
+        percent_offset = rand::gen_range(-0.10, 0.10);
     }
 
     ball.velocity.dx = percent_offset * ball.speed;

@@ -1,5 +1,3 @@
-extern crate rand;
-
 use ball_bounce_macroquad::{systems::*, *};
 use macroquad::prelude::*;
 
