@@ -21,6 +21,7 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
                 // varible from BallState::Ready enum
                 launch_ball(ball, player);
                 ball.state = BallState::Playing;
+                game_state.score = 0;
             }
         }
         BallState::Playing => {
@@ -56,8 +57,6 @@ pub fn execute(game_state: &mut GameState, delta: f32) {
                     launch_ball(ball, player);
                 }
 
-                // ball goes out of bounds
-                // reinitiliaze variables for new game.
                 if ball.position.y + ball.radius >= SCREEN_H {
                     restart_ball(ball, random_player_index(game_state.players.len()))
                 }
