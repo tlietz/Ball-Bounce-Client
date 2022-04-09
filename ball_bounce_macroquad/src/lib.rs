@@ -119,16 +119,15 @@ pub async fn initial_game_state() -> GameState {
 
     // Ball initialized sitting on the top of a random player paddle,
     // randomly deviated from the center
-    let ball_radius = PLATFORM_HEIGHT * 0.5;
     let offset = rand_ball_offset();
     let ball = Ball {
         position: Position {
             x: offset + SCREEN_W / 2.,
-            y: SCREEN_H - (ball_radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H),
+            y: init_ball_offset(BALL_START_RADIUS),
         },
         velocity: Velocity { dx: 0., dy: 0. },
         speed: BALL_START_SPEED,
-        radius: ball_radius,
+        radius: BALL_START_RADIUS,
         state: BallState::Ready {
             player_entity_index: random_player_index(players.len()),
             offset,
@@ -201,6 +200,10 @@ fn restart_ball(ball: &mut Ball, player_index: EntityIndex) {
         player_entity_index: player_index,
         offset: rand_ball_offset(),
     };
-    ball.position.y = SCREEN_H - (ball.radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H);
+    ball.position.y = init_ball_offset(ball.radius);
     ball.speed = BALL_START_SPEED;
+}
+
+fn init_ball_offset(radius: f32) -> f32 {
+    SCREEN_H - (radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H)
 }
