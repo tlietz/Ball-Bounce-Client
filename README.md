@@ -1,6 +1,6 @@
 # Ball Bounce 
 
-
+![bounce out gif](media/ball_bounce_first.gif)
 
 Ball Bounce is a game created in Rust using the [macroquad](https://github.com/not-fl3/macroquad) game engine.
 It is compiled to wasm so that it can be played in a browser. For now, it is has local multiplayer with 2 players and keyboard controls.
@@ -12,7 +12,6 @@ Move the purple paddle using the left and right arrow keys.
 ## Code Architecture
 
 It has an ECS-like (entity component system) architecture.
-
 
 ## Future Work
 
