@@ -1,0 +1,48 @@
+OPT_LEVEL = Some("3")
+TARGET = Some("aarch64-apple-darwin")
+HOST = Some("aarch64-apple-darwin")
+CC_aarch64-apple-darwin = None
+CC_aarch64_apple_darwin = None
+HOST_CC = None
+CC = None
+CFLAGS_aarch64-apple-darwin = None
+CFLAGS_aarch64_apple_darwin = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some("true")
+CARGO_CFG_TARGET_FEATURE = None
+CC_aarch64-apple-darwin = None
+CC_aarch64_apple_darwin = None
+HOST_CC = None
+CC = None
+CFLAGS_aarch64-apple-darwin = None
+CFLAGS_aarch64_apple_darwin = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = None
+CC_aarch64-apple-darwin = None
+CC_aarch64_apple_darwin = None
+HOST_CC = None
+CC = None
+CFLAGS_aarch64-apple-darwin = None
+CFLAGS_aarch64_apple_darwin = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = None
+running: "cc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "-g" "-fno-omit-frame-pointer" "-arch" "arm64" "-I" "external/sokol" "-Wall" "-Wextra" "-fobjc-arc" "-DSOKOL_GLCORE33" "-D_DEBUG" "-DSOKOL_DEBUG" "-Wno-unused-parameter" "-Wno-unused-function" "-o" "/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/build/sapp-darwin-49780fc7edcd1d43/out/src/sokol_app.o" "-c" "src/sokol_app.m"
+exit status: 0
+AR_aarch64-apple-darwin = None
+AR_aarch64_apple_darwin = None
+HOST_AR = None
+AR = None
+running: "ar" "cq" "/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/build/sapp-darwin-49780fc7edcd1d43/out/libsokol-app-sys.a" "/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/build/sapp-darwin-49780fc7edcd1d43/out/src/sokol_app.o"
+exit status: 0
+running: "ar" "s" "/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/build/sapp-darwin-49780fc7edcd1d43/out/libsokol-app-sys.a"
+exit status: 0
+cargo:rustc-link-lib=static=sokol-app-sys
+cargo:rustc-link-search=native=/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/build/sapp-darwin-49780fc7edcd1d43/out
+cargo:rustc-link-lib=framework=Cocoa
+cargo:rustc-link-lib=framework=OpenGL

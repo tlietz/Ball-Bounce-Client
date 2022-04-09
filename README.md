@@ -1,8 +1,9 @@
 # Ball Bounce 
 
+You can play the game here: https://tlietz.github.io/Ball-Bounce-Client/index.html
+
 ![bounce out gif](media/ball_bounce_first.gif)
 
-You can play the game here: https://tlietz.github.io/Ball-Bounce-Client/index.html
 
 Ball Bounce is a game created in Rust using the [macroquad](https://github.com/not-fl3/macroquad) game engine.
 It is compiled to wasm so that it can be played in a browser. For now, it is has local multiplayer with 2 players and keyboard controls.
