@@ -1,0 +1,11 @@
+/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/deps/crc32fast-698d72e73259cd6f.rmeta: /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/lib.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/baseline.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/combine.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/specialized/mod.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/table.rs
+
+/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/deps/libcrc32fast-698d72e73259cd6f.rlib: /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/lib.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/baseline.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/combine.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/specialized/mod.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/table.rs
+
+/Users/tlietz/Developer/Games/Ball-Bounce/Ball-Bounce-Client/ball_bounce_macroquad/target/debug/deps/crc32fast-698d72e73259cd6f.d: /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/lib.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/baseline.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/combine.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/specialized/mod.rs /Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/table.rs
+
+/Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/lib.rs:
+/Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/baseline.rs:
+/Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/combine.rs:
+/Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/specialized/mod.rs:
+/Users/tlietz/.cargo/registry/src/github.com-1ecc6299db9ec823/crc32fast-1.3.0/src/table.rs:
