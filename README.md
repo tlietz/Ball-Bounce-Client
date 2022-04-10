@@ -1,5 +1,8 @@
 # Ball Bounce 
 
+Move the white paddle using the `A` and `D` keys. 
+Move the purple paddle using the left and right arrow keys.
+
 You can play the game here: https://tlietz.github.io/Ball-Bounce-Client/index.html
 
 ![bounce out gif](media/ball_bounce_first.gif)
@@ -8,9 +11,6 @@ You can play the game here: https://tlietz.github.io/Ball-Bounce-Client/index.ht
 Ball Bounce is a game created in Rust using the [macroquad](https://github.com/not-fl3/macroquad) game engine.
 It is compiled to wasm so that it can be played in a browser. For now, it is has local multiplayer with 2 players and keyboard controls.
 
-Move the white paddle using the `A` and `D` keys. 
-
-Move the purple paddle using the left and right arrow keys.
 
 ## Code Architecture
 
