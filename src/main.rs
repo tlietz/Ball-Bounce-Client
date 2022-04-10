@@ -1,4 +1,5 @@
-use ball_bounce_macroquad::{systems::*, *};
+use ball_bounce_macroquad::init::initial_game_state;
+use ball_bounce_macroquad::systems::*;
 use macroquad::prelude::*;
 
 #[macroquad::main("Ball Bounce")]

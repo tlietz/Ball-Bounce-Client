@@ -3,6 +3,7 @@
 // of the objects defined here in `lib`.
 
 mod constants;
+pub mod init;
 pub mod systems;
 
 use constants::*;
@@ -84,106 +85,6 @@ pub struct GameState {
     font: Font,
 }
 
-pub async fn initial_game_state() -> GameState {
-    let player1 = Player {
-        position: Position {
-            x: SCREEN_W / 4.,
-            y: SCREEN_H - (PLATFORM_FLOAT_H + PLATFORM_HEIGHT),
-        },
-        speed: SCREEN_W / 2.,
-        width: PLATFORM_START_W,
-        height: PLATFORM_HEIGHT,
-        control: Control {
-            left: KeyCode::A,
-            right: KeyCode::D,
-        },
-        color: WHITE,
-    };
-    let mut players = vec![player1];
-
-    let player2 = Player {
-        position: Position {
-            x: SCREEN_W * 3. / 4.,
-            y: SCREEN_H - (PLATFORM_FLOAT_H + PLATFORM_HEIGHT),
-        },
-        speed: SCREEN_W / 2.,
-        width: PLATFORM_START_W,
-        height: PLATFORM_HEIGHT,
-        control: Control {
-            left: KeyCode::Left,
-            right: KeyCode::Right,
-        },
-        color: PURPLE,
-    };
-    players.push(player2);
-
-    // Ball initialized sitting on the top of a random player paddle,
-    // randomly deviated from the center
-    let offset = rand_ball_offset();
-    let ball = Ball {
-        position: Position {
-            x: offset + SCREEN_W / 2.,
-            y: init_ball_offset(BALL_START_RADIUS),
-        },
-        velocity: Velocity { dx: 0., dy: 0. },
-        speed: BALL_START_SPEED,
-        radius: BALL_START_RADIUS,
-        state: BallState::Ready {
-            player_entity_index: random_player_index(players.len()),
-            offset,
-        },
-        color: RED,
-    };
-    let balls = vec![ball];
-
-    let text = Text {
-        text: "Press spacebar to start",
-        position: Position {
-            x: SCREEN_W * 0.1,
-            y: SCREEN_H * 0.4,
-        },
-        font_size: 40,
-    };
-    let texts = vec![text];
-
-    let left_border = Border {
-        position: Position { x: 0., y: 0. },
-        width: BORDER_W,
-        height: SCREEN_H,
-        color: GRAY,
-    };
-    let mut borders = vec![left_border];
-
-    let right_border = Border {
-        position: Position {
-            x: SCREEN_W - BORDER_W,
-            y: 0.,
-        },
-        width: BORDER_W,
-        height: SCREEN_H,
-        color: GRAY,
-    };
-    borders.push(right_border);
-
-    let top_border = Border {
-        position: Position { x: 0., y: 0. },
-        width: SCREEN_W,
-        height: BORDER_W,
-        color: GRAY,
-    };
-    borders.push(top_border);
-
-    let font = load_ttf_font("assets/MinimalPixelv2.ttf").await.unwrap();
-    GameState {
-        players,
-        balls,
-        texts,
-        borders,
-        score: 0,
-        font,
-    }
-}
-
 fn random_player_index(num_players: usize) -> usize {
     rand::gen_range(0, num_players)
 }
@@ -206,4 +107,15 @@ fn restart_ball(ball: &mut Ball, player_index: EntityIndex) {
 
 fn init_ball_offset(radius: f32) -> f32 {
     SCREEN_H - (radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn can_lose() {
+        let game_state = {};
+        let offset: f32 = 0.7;
+        assert_eq!(2 + 2, 4);
+    }
 }
