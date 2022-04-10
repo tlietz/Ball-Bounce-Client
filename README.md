@@ -27,7 +27,7 @@ For example, let's look at adding the feature of bouncing a ball off a paddle wi
 
 In OOP, we would have to decide whether to add `bounce()` to the `Ball` or `Player` object. Does a ball bounce off the paddle, or does the paddle bounce the ball? This may be easy to manage with a simple game, but as it gets more complex, OOP would get exponentially harder to manage.
 
-In ECS, a system takes in the `game_state` and determines when to call `bounce()`. 
+With the ECS used here, a system takes in the `game_state` and determines when to call `bounce()`. 
 The system is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
 
 ## Future Work
