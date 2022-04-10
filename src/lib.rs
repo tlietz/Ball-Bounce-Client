@@ -108,14 +108,3 @@ fn restart_ball(ball: &mut Ball, player_index: EntityIndex) {
 fn init_ball_offset(radius: f32) -> f32 {
     SCREEN_H - (radius + PLATFORM_HEIGHT + PLATFORM_FLOAT_H)
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn can_lose() {
-        let game_state = {};
-        let offset: f32 = 0.7;
-        assert_eq!(2 + 2, 4);
-    }
-}
