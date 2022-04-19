@@ -1,5 +1,7 @@
 # Ball Bounce 
 
+Try to keep the ball bouncing.
+
 Move the white paddle using the `A` and `D` keys. 
 Move the purple paddle using the left and right arrow keys.
 
