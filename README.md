@@ -3,7 +3,7 @@
 Try to keep the ball bouncing.
 
 Move the white paddle using the `A` and `D` keys. 
-Move the purple paddle using the left and right arrow keys.
+Move the purple paddle using the `left arrow` and `right arrow`.
 
 You can play the game here: https://tlietz.github.io/Ball-Bounce-Client/index.html
 
