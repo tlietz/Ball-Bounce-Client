@@ -1,4 +1,4 @@
-// Handles restarting the game state
+// TODO: Handles restarting the game state
 use crate::*;
 use macroquad::prelude::*;
 
