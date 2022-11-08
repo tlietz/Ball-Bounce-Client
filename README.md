@@ -23,18 +23,19 @@ The `Player` and `Ball` are entities, which are represented by `struct`s.
 `Velocity`, `Position`, and `Control` are components, which are also represented by `struct`s. Entities can have any number of components depending on what characteristics they need. For example, the `Ball` entity does not have a `Control` component, but the `Player` entities do.
 
 `System`s are functions that control everything.
-All of the complexity of the game logic is contained in the systems. This makes it easy to know where features of the game should be created in the code. If we were to use OOP, it would not be as easy because games have many features that require the interaction between mutliple objects. 
+All of the game logic complexity is contained within the `system`s. This makes it easy to know where in the code features should be implemented. 
+
+This also explains why ECS was chosen instead of OOP. With OOP, it would be more difficult to determine where features should be implemented because games have many features that require the interaction between mutliple objects. 
 
 For example, let's look at adding the feature of bouncing a ball off a paddle with a `bounce()` function. 
 
 In OOP, we would have to decide whether to add `bounce()` to the `Ball` or `Player` object. Does a ball bounce off the paddle, or does the paddle bounce the ball? This may be easy to manage with a simple game, but as it gets more complex, OOP would get exponentially harder to manage.
 
-With the ECS used here, a system takes in the `game_state` and determines when to call `bounce()`. 
-The system is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
+With ECS, a `system` takes in the `game_state` and determines when to call `bounce()`. 
+The `system` is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
 
 ## Future Work
 
-Make a `GameState` enum to replace the currently used `BallState`. This will allow adding states like `Pause`, and `Menu`. 
-
-Then, create a `game_state_system` that handles changing the `GameState` enum.
+- Make a `GameState` enum to replace the currently used `BallState`. This will allow adding states like `Pause`, and `Menu`. 
+- Create a `game_state_system` that handles changing the `GameState` enum.
 For example, pressing the `p` button for pause, and pressing `q` to quit. 
