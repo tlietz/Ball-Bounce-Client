@@ -16,7 +16,7 @@ It is compiled to wasm so that it can be played in a browser. For now, it is has
 
 ## Code Architecture
 
-It has an ECS-like (entity component system) architecture.
+The game is created with an ECS (entity component system) architecture.
 
 The `Player` and `Ball` are entities, which are represented by `struct`s.
 
