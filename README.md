@@ -27,12 +27,12 @@ All of the game logic complexity is contained within the `system`s. This makes i
 
 This also explains why ECS was chosen instead of OOP. With OOP, it would be more difficult to determine where features should be implemented because games have many features that require interaction between mutliple objects. 
 
-For example, let's see how we would implement a `bounce()` function that bounces a ball off our paddle. 
+For example, suppose we want to implement a `bounce()` function that bounces a ball off our paddle. 
 
 In OOP, we would have to decide whether to add `bounce()` to the `Ball` or `Player` object. *Does a ball bounce off the paddle, or does the paddle bounce the ball?* This may be easy to manage with a simple game, but as it gets more complex, OOP would become exponentially harder to manage.
 
 With ECS, a `system` takes in the `game_state` and determines when to call `bounce()`. 
-The `system` is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods like we would with OOP.
+The `system` is external to both the `Ball` and the `Player`, so we no longer have to worry about where to put methods that handle interaction between multiple objects, like we would with OOP.
 
 ## Future Work
 
